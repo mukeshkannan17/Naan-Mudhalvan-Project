@@ -1,0 +1,14 @@
+public class tenantschedulable implements Schedulable {
+    public void execute(SchedulableContext sc) {
+        List<Tenant__c> ten = [SELECT Id, Status_of_Possession__c FROM Tenant__c];
+        List<Tenant__c> tenantstodelete = new List<Tenant__c>();
+        
+        for (Tenant__c te : ten) {
+            if (te.Status_of_Possession__c == 'Closed') {
+                tenantstodelete.add(te);
+            }
+        }
+        
+        delete tenantstodelete;
+    }
+}

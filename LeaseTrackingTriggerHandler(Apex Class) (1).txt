@@ -1,0 +1,26 @@
+public class LeaseTrackingTriggerHandler {
+    public static void method1(List<Lease_Tracking__c> oldLeases, List<Lease_Tracking__c> newLeases) {
+        Decimal paymentThreshold = 0.5;
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+
+        for (Integer i = 0; i < newLeases.size(); i++) {
+            Lease_Tracking__c newLease = newLeases[i];
+            Lease_Tracking__c oldLease = oldLeases[i];
+
+            if (newLease.Amount_Paid__c < (newLease.Total_rent_Yearly__c * paymentThreshold) &&
+                oldLease.Amount_Paid__c != newLease.Amount_Paid__c) {
+                
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                email.setToAddresses(new String[] {newLease.Tenant_Email__c});
+                email.setSubject('Rent Payment Reminder');
+                email.setPlainTextBody('Dear Tenant, you have not paid 50% of your total rent. Please make a payment as soon as possible.');
+
+                emails.add(email);
+            }
+        }
+
+        if (!emails.isEmpty()) {
+            Messaging.sendEmail(emails);
+        }
+    }
+}

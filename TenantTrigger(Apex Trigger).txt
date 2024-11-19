@@ -1,0 +1,5 @@
+trigger TenantTrigger on Tenant__c (before insert) {
+    if (Trigger.isBefore) {
+        TenantTriggerHandler.method1(Trigger.new);
+    }
+}

@@ -1,0 +1,9 @@
+public class TenantTriggerHandler {
+    public static void method1(List<Tenant__c> tenants) {
+        for (Tenant__c tenant : tenants) {
+            if (tenant.PAN_Card__c != null && tenant.PAN_Card__c.length() > 10) {
+                tenant.addError('This PAN Card number is invalid. Please enter a valid PAN Card number.');
+            }
+        }
+    }
+}
